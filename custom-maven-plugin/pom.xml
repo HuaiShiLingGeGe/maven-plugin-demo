@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>custom-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>自定义 Maven 插件的演示代码</description>
+
+    <!--自定义 Maven 插件步骤-->
+    <!-- 0、注意插件的工程名称要以 -maven-plugin 结尾-->
+    <!-- 1 修改 packaging 为 maven-plugin -->
+    <!-- 2 引入 maven-plugin-api -->
+    <!-- 3 使用注解的方式进行开发 -->
+    <!-- 4 install提示版本过低时需要指定 maven-plugin-plugin 版本-->
+
+    <packaging>maven-plugin</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+        <!--使用注解的方式创建 Maven 插件-->
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+        <!--获取 Maven 工程 pom.xml 的配置信息-->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--生成插件描述的信息-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.5</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

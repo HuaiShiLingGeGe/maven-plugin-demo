@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.15</version>
+    </parent>
+
+    <groupId>org.example</groupId>
+    <artifactId>maven-assembly-plugin-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>
+        assembly是用来构建源码的 Maven 插件
+        可以将各种类型的文件（jar、xml、md 归档为一个 zip、tar 包等文件）
+    </description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--官方地址： https://maven.apache.org/plugins/maven-assembly-plugin/assembly.html -->
+            <!--maven-assembly-plugin将所需要的项目源码、配置文件、文本等文件 all in one-->
+            <!--最终聚合为一个 fat-jar 的 jar 包，部署时使用 java -jar 指令直接启动-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!--配置Main方法入口-->
+                            <mainClass>org.example.Main</mainClass>
+                        </manifest>
+                        <!--在 MANIFEST.MF文件末尾添加指定的 key、value-->
+                        <manifestEntries>
+                            <company>exocr</company>
+                            <author>xiemouren</author>
+                        </manifestEntries>
+                    </archive>
+                    <descriptors>
+                        <!--assembly 的配置文件-->
+                        <descriptor>${basedir}/src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                    <!--固定配置-->
+                    <!--</descriptorRefs>-->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <!--最终的 jar 包名称-->
+                    <finalName>${project.build.finalName}</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!--single只运行一次-->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

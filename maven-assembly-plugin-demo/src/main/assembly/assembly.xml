@@ -1,0 +1,46 @@
+<assembly>
+    <id>assembly</id>
+    <!--打包的文件格式-->
+    <formats>
+        <format>tar.gz</format>
+        <format>tar.bz2</format>
+        <format>zip</format>
+    </formats>
+    <!--tar.gz压缩包下是否生成和项目名相同的根目录-->
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/bin</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <!-- Linux权限 -->
+            <fileMode>0644</fileMode>
+        </fileSet>
+        <fileSet>
+            <!--  也可以使用 Maven 内置的变量 如：${project.basedir}-->
+            <directory>target/classes/META-INF/conf</directory>
+            <outputDirectory>conf/META-INF/conf</outputDirectory>
+            <!-- Linux权限 -->
+            <fileMode>0644</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>target/classes</directory>
+            <outputDirectory>conf</outputDirectory>
+            <fileMode>0644</fileMode>
+            <includes><!-- 只负责这些目标文件-->
+                <include>*.properties</include>
+                <include>*.xml</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <!-- 输出到lib路径 -->
+    <dependencySets>
+        <dependencySet>
+            <!--是否在最外层套一个本项目的名称的文件目录-->
+            <useProjectArtifact>true</useProjectArtifact>
+            <!-- 输出到这个路径下 -->
+            <outputDirectory>lib</outputDirectory>
+            <!--将scope为runtime的依赖包打包-->
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+</assembly>

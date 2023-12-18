@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.15</version>
+    </parent>
+
+    <groupId>org.example</groupId>
+    <artifactId>proguard-plugin-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>proguard是一个常用的代码混淆插件</description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--具体参考 https://www.bilibili.com/video/BV1au4y1e7rE-->
+            <!--引入 proguard Maven 插件-->
+            <!--proguard 源码 https://github.com/wvengen/proguard-maven-plugin-->
+            <!--proguard 官网 https://wvengen.github.io/proguard-maven-plugin/-->
+            <!--可选参数 https://wvengen.github.io/proguard-maven-plugin/proguard-mojo.html-->
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--输入的 jar 包名称-->
+                    <injar>${project.build.finalName}</injar>
+                    <!--输出的 jar 包名称-->
+                    <outputDirectory>${project.build.finalName}</outputDirectory>
+                    <!--输出的基础目录-->
+                    <outputDirectory>${project.basedir}</outputDirectory>
+                    <!--是否需要代码混淆-->
+                    <obfuscate>true</obfuscate>
+                    <!--指定 proguard 的配置文件的位置，也可在下面的 options 标签内指定-->
+                    <!--<proguardInclude>${project.basedir}/proguard.cfg</proguardInclude>-->
+                    <libs>
+                        <!--指定需要包含的 jdk 相关的 jar 文件-->
+                        <lib>${java.home}/lit/rt.jar</lib>
+                    </libs>
+                    <!--对依赖的 jar 包进行过滤，如下配置就是对 META-INF 不做处理-->
+                    <inLibsFilter>!META-INF/**,!/META-INF/versions/9/**.class</inLibsFilter>
+                    <!--解决 The filename or extension is too long 这个问题-->
+                    <generateTemporaryConfigurationFile></generateTemporaryConfigurationFile>
+                    <!--配置混淆的细节-->
+                    <!--查看所有的可选参数 https://www.guardsquare.com/manual/refcard -->
+                    <options>
+                        <!--配置目标 jdk 版本-->
+                        <option>-target 1.8</option>
+                        <!--不做收缩-->
+                        <option>-dontshrink</option>
+                        <!--不做优化-->
+                        <option>-dontoptimize</option>
+                        <!--对显示指定类名的地方做混淆，如 Class.forName("className")-->
+                        <option>-adaptclassstring</option>
+                        <!--不跳过非公共类文件-->
+                        <option>-dontskipnonpubliclibraryclasses</option>
+                        <!--不跳过非公共类成员-->
+                        <option>-dontskipnonpubliclibraryclassmembers</option>
+                        <!--混淆时：不使用大小写混合的类名，避免 windows 下出现问题-->
+                        <option>-dontusemixedcaseclassnames</option>
+                        <!--对于类成员的命名采取唯一的策略-->
+                        <option>-useuniqueclassmembernames</option>
+                        <!--不混淆包名-->
+                        <option>-keeppackgenames</option>
+                        <!--保留参数名，因为 controller、mapper 等类中方法的参数是和配置文件对应的，xml 匹配不到属性-->
+                        <option>-keepparameternames</option>
+                        <!--保留给定的可选属性，下面配的是官方推荐的配置-->
+                        <option>-keepattributes Exceptions, InnerClasses, Signature, Deprecated, SourceFile, SourceDir,
+                            LineNumberTable, LocalVariableTable, LocalVariableTypeTable, Synthetic, EnclosingMethod,
+                            *Annotation*
+                        </option>
+                        <!--在输出 jar（或 wars、ears、zip 或目录）中保留指定目录，固定需要这个参数-->
+                        <option>-keepdirectories</option>
+                        <!--保留枚举成员和方法-->
+                        <option>-keepclassmembers enum * {*;}</option>
+                        <!--对指定的类不会重命名，指定的注解修饰的对象也不重命名，下面是最佳实践-->
+                        <option>-keep class * {
+                            @org.springframework.beans.factory.annotation.Autowired *;
+                            @org.springframework.beans.factory.annotation.Value *;
+                            @javax.annotation.Resource *;
+                            @org.springframework.context.annotation.Bean *;
+                            }
+                        </option>
+                        <!--保留程序主入口-->
+                        <option>-keepclasseswithmembers public class * {
+                            public static void main(java.lang.String[]);
+                            }
+                        </option>
+                        <!--Mapper不做混淆-->
+                        <option>-keep class **.mapper.** {*;}</option>
+                        <!--实体类、请求响应字段不混淆-->
+                        <option>-keep class **.bean.** {*;}</option>
+                    </options>
+                </configuration>
+            </plugin>
+
+            <!--springboot 自带的打包插件-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
