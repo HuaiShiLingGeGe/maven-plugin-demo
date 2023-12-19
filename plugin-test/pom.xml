@@ -8,6 +8,12 @@
     <artifactId>plugin-test</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,7 +59,7 @@
                             <goal>move-jar-maven-plugin</goal>
                         </goals>
                         <configuration>
-                            <destAbsoluteDir>/Users/xiechuanling/Documents/project/maven-plugin-demo/plugin-test/dest
+                            <destAbsoluteDir>${project.basedir}/dest
                             </destAbsoluteDir>
                         </configuration>
                     </execution>

@@ -9,6 +9,13 @@
     <version>1.0-SNAPSHOT</version>
     <description>自定义 Maven 插件的演示代码</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+
     <!--自定义 Maven 插件步骤-->
     <!-- 0、注意插件的工程名称要以 -maven-plugin 结尾-->
     <!-- 1 修改 packaging 为 maven-plugin -->
@@ -48,7 +55,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.5</version>
+                <version>3.3</version>
             </plugin>
         </plugins>
     </build>

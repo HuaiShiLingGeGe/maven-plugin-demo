@@ -11,10 +11,13 @@
         <module name="maven-assembly-plugin-demo" />
         <module name="custom-maven-plugin" />
         <module name="proguard-plugin-demo" />
+        <module name="spring-boot-maven-plugin-demo" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="17" />
   </component>
   <component name="JavacSettings">
+    <option name="PREFER_TARGET_JDK_COMPILER" value="false" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="maven-assembly-plugin-demo" options="-parameters" />
       <module name="proguard-plugin-demo" options="-parameters" />
